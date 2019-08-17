@@ -145,7 +145,7 @@ class _LogConsoleState extends State<LogConsole> {
               mini: true,
               clipBehavior: Clip.antiAlias,
               child: Icon(
-                MdiIcons.arrowDown,
+                Icons.arrow_downward,
                 color: widget.dark ? Colors.white : Colors.lightBlue[900],
               ),
               onPressed: _scrollToBottom,
@@ -196,7 +196,7 @@ class _LogConsoleState extends State<LogConsole> {
           ),
           Spacer(),
           IconButton(
-            icon: Icon(MdiIcons.formatFontSizeIncrease),
+            icon: Icon(Icons.add),
             onPressed: () {
               setState(() {
                 _logFontSize++;
@@ -204,7 +204,7 @@ class _LogConsoleState extends State<LogConsole> {
             },
           ),
           IconButton(
-            icon: Icon(MdiIcons.formatFontSizeDecrease),
+            icon: Icon(Icons.remove),
             onPressed: () {
               setState(() {
                 _logFontSize--;
