@@ -1,6 +1,6 @@
 name: logger_flutter
 description: Flutter extension for logger. Please go there for documentation.
-version: 0.7.1
+version: 0.7.2
 author: Simon Leier <simonleier@gmail.com>
 homepage: https://github.com/leisim/logger_flutter
 
