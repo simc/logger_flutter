@@ -7,9 +7,18 @@ bool _initialized = false;
 class LogConsole extends StatefulWidget {
   final bool dark;
   final bool showCloseButton;
+  final List<Level> levelsToFilter;
+  final Level defaultLevel;
 
-  LogConsole({this.dark = false, this.showCloseButton = false})
-      : assert(_initialized, "Please call LogConsole.init() first.");
+  LogConsole({
+    this.dark = false,
+    this.showCloseButton = false,
+    List<Level> levelsToFilter,
+    Level defaultLevel,
+  })  : levelsToFilter =
+            levelsToFilter ?? const [Level.verbose, Level.debug, Level.info, Level.warning, Level.error, Level.wtf],
+        defaultLevel = defaultLevel ?? Level.verbose,
+        assert(_initialized, "Please call LogConsole.init() first.");
 
   static void init({int bufferSize = 20}) {
     if (_initialized) return;
@@ -46,16 +55,27 @@ class _LogConsoleState extends State<LogConsole> {
   var _scrollController = ScrollController();
   var _filterController = TextEditingController();
 
-  Level _filterLevel = Level.verbose;
+  Level _filterLevel;
   double _logFontSize = 14;
 
   var _currentId = 0;
   bool _scrollListenerEnabled = true;
   bool _followBottom = true;
 
+  final _mapLevelText = {
+    Level.verbose: 'VERBOSE',
+    Level.debug: 'DEBUG',
+    Level.info: 'INFO',
+    Level.warning: 'WARNING',
+    Level.error: 'ERROR',
+    Level.wtf: 'WTF',
+  };
+
   @override
   void initState() {
     super.initState();
+
+    _filterLevel = widget.defaultLevel;
 
     _callback = (e) {
       if (_renderedBuffer.length == _bufferSize) {
@@ -244,30 +264,11 @@ class _LogConsoleState extends State<LogConsole> {
           DropdownButton(
             value: _filterLevel,
             items: [
-              DropdownMenuItem(
-                child: Text("VERBOSE"),
-                value: Level.verbose,
-              ),
-              DropdownMenuItem(
-                child: Text("DEBUG"),
-                value: Level.debug,
-              ),
-              DropdownMenuItem(
-                child: Text("INFO"),
-                value: Level.info,
-              ),
-              DropdownMenuItem(
-                child: Text("WARNING"),
-                value: Level.warning,
-              ),
-              DropdownMenuItem(
-                child: Text("ERROR"),
-                value: Level.error,
-              ),
-              DropdownMenuItem(
-                child: Text("WTF"),
-                value: Level.wtf,
-              )
+              for (final level in widget.levelsToFilter)
+                DropdownMenuItem(
+                  child: Text(_mapLevelText[level]),
+                  value: level,
+                ),
             ],
             onChanged: (value) {
               _filterLevel = value;
