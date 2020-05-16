@@ -13,6 +13,7 @@ class LogConsoleOnBoxGesture extends StatefulWidget {
   final bool debugOnly;
   final List<Level> levelsToFilter;
   final Level defaultLevel;
+  final double lineWidth;
 
   LogConsoleOnBoxGesture({
     @required this.child,
@@ -20,6 +21,7 @@ class LogConsoleOnBoxGesture extends StatefulWidget {
     this.debugOnly = true,
     this.levelsToFilter,
     this.defaultLevel,
+    this.lineWidth,
   });
 
   @override
@@ -105,6 +107,7 @@ class _LogConsoleOnCircleGestureState extends State<LogConsoleOnBoxGesture> {
       dark: widget.dark ?? Theme.of(context).brightness == Brightness.dark,
       levelsToFilter: widget.levelsToFilter,
       defaultLevel: widget.defaultLevel,
+      lineWidth: widget.lineWidth,
     );
     PageRoute route;
     if (Platform.isIOS) {

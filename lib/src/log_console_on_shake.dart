@@ -6,6 +6,7 @@ class LogConsoleOnShake extends StatefulWidget {
   final bool debugOnly;
   final List<Level> levelsToFilter;
   final Level defaultLevel;
+  final double lineWidth;
 
   LogConsoleOnShake({
     @required this.child,
@@ -13,6 +14,7 @@ class LogConsoleOnShake extends StatefulWidget {
     this.debugOnly = true,
     this.levelsToFilter,
     this.defaultLevel,
+    this.lineWidth,
   });
 
   @override
@@ -58,6 +60,7 @@ class _LogConsoleOnShakeState extends State<LogConsoleOnShake> {
       dark: widget.dark ?? Theme.of(context).brightness == Brightness.dark,
       levelsToFilter: widget.levelsToFilter,
       defaultLevel: widget.defaultLevel,
+      lineWidth: widget.lineWidth,
     );
     PageRoute route;
     if (Platform.isIOS) {

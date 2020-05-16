@@ -9,12 +9,14 @@ class LogConsole extends StatefulWidget {
   final bool showCloseButton;
   final List<Level> levelsToFilter;
   final Level defaultLevel;
+  final double lineWidth;
 
   LogConsole({
     this.dark = false,
     this.showCloseButton = false,
     List<Level> levelsToFilter,
     Level defaultLevel,
+    this.lineWidth = 1600,
   })  : levelsToFilter =
             levelsToFilter ?? const [Level.verbose, Level.debug, Level.info, Level.warning, Level.error, Level.wtf],
         defaultLevel = defaultLevel ?? Level.verbose,
@@ -177,27 +179,33 @@ class _LogConsoleState extends State<LogConsole> {
   }
 
   Widget _buildLogContent() {
+    final elements = ListView.builder(
+      shrinkWrap: true,
+      controller: _scrollController,
+      itemBuilder: (context, index) {
+        var logEntry = _filteredBuffer[index];
+        return Text.rich(
+          logEntry.span,
+          key: Key(logEntry.id.toString()),
+          style: TextStyle(fontSize: _logFontSize),
+        );
+      },
+      itemCount: _filteredBuffer.length,
+    );
+
+    final child = widget.lineWidth != null && widget.lineWidth > 0
+        ? SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: widget.lineWidth,
+              child: elements,
+            ),
+          )
+        : elements;
+
     return Container(
       color: widget.dark ? Colors.black : Colors.grey[150],
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: SizedBox(
-          width: 1600,
-          child: ListView.builder(
-            shrinkWrap: true,
-            controller: _scrollController,
-            itemBuilder: (context, index) {
-              var logEntry = _filteredBuffer[index];
-              return Text.rich(
-                logEntry.span,
-                key: Key(logEntry.id.toString()),
-                style: TextStyle(fontSize: _logFontSize),
-              );
-            },
-            itemCount: _filteredBuffer.length,
-          ),
-        ),
-      ),
+      child: child,
     );
   }
 
