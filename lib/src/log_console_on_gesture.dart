@@ -13,6 +13,7 @@ class LogConsoleOnGesture extends StatefulWidget {
   final List<Level> levelsToFilter;
   final Level defaultLevel;
   final double lineWidth;
+  final bool spaceBetweenElements;
 
   LogConsoleOnGesture({
     @required this.child,
@@ -22,6 +23,7 @@ class LogConsoleOnGesture extends StatefulWidget {
     this.levelsToFilter,
     this.defaultLevel,
     this.lineWidth,
+    this.spaceBetweenElements,
   });
 
   @override
@@ -76,6 +78,7 @@ class _LogConsoleOnGestureState extends State<LogConsoleOnGesture> {
       levelsToFilter: widget.levelsToFilter,
       defaultLevel: widget.defaultLevel,
       lineWidth: widget.lineWidth,
+      spaceBetweenElements: widget.spaceBetweenElements,
     );
     PageRoute route;
     if (Platform.isIOS) {

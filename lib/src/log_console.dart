@@ -10,6 +10,7 @@ class LogConsole extends StatefulWidget {
   final List<Level> levelsToFilter;
   final Level defaultLevel;
   final double lineWidth;
+  final bool spaceBetweenElements;
 
   LogConsole({
     this.dark = false,
@@ -17,10 +18,12 @@ class LogConsole extends StatefulWidget {
     List<Level> levelsToFilter,
     Level defaultLevel,
     double lineWidth,
+    bool spaceBetweenElements,
   })  : levelsToFilter =
             levelsToFilter ?? const [Level.verbose, Level.debug, Level.info, Level.warning, Level.error, Level.wtf],
         defaultLevel = defaultLevel ?? Level.verbose,
         lineWidth = lineWidth ?? 1600,
+        spaceBetweenElements = spaceBetweenElements ?? false,
         assert(_initialized, "Please call LogConsole.init() first.");
 
   static void init({int bufferSize = 20}) {
@@ -185,10 +188,13 @@ class _LogConsoleState extends State<LogConsole> {
       controller: _scrollController,
       itemBuilder: (context, index) {
         var logEntry = _filteredBuffer[index];
-        return Text.rich(
-          logEntry.span,
-          key: Key(logEntry.id.toString()),
-          style: TextStyle(fontSize: _logFontSize),
+        return Padding(
+          padding: EdgeInsets.symmetric(vertical: widget.spaceBetweenElements ? 4.0 : 0.0),
+          child: Text.rich(
+            logEntry.span,
+            key: Key(logEntry.id.toString()),
+            style: TextStyle(fontSize: _logFontSize),
+          ),
         );
       },
       itemCount: _filteredBuffer.length,
