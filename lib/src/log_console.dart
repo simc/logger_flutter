@@ -16,10 +16,11 @@ class LogConsole extends StatefulWidget {
     this.showCloseButton = false,
     List<Level> levelsToFilter,
     Level defaultLevel,
-    this.lineWidth = 1600,
+    double lineWidth,
   })  : levelsToFilter =
             levelsToFilter ?? const [Level.verbose, Level.debug, Level.info, Level.warning, Level.error, Level.wtf],
         defaultLevel = defaultLevel ?? Level.verbose,
+        lineWidth = lineWidth ?? 1600,
         assert(_initialized, "Please call LogConsole.init() first.");
 
   static void init({int bufferSize = 20}) {
