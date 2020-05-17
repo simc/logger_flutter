@@ -64,33 +64,37 @@ class _LogConsoleOnCircleGestureState extends State<LogConsoleOnBoxGesture> {
 
   void _checkForPattern() {
     const tol = 10;
-    Offset start = _dragUpdateDetails.first.globalPosition;
-    List<_Direction> directions = [];
-    for (final details in _dragUpdateDetails) {
-      final dx = (details.globalPosition - start).dx;
-      final dy = (details.globalPosition - start).dy;
+    if (_dragUpdateDetails.length > 0) {
+      Offset start = _dragUpdateDetails.first.globalPosition;
+      List<_Direction> directions = [];
+      for (final details in _dragUpdateDetails) {
+        final dx = (details.globalPosition - start).dx;
+        final dy = (details.globalPosition - start).dy;
 
-      // if one axis delta is sufficiently large, determine direction and set new start reference point
-      if (dx.abs() > tol || dy.abs() > tol) {
-        _Direction direction;
-        if (dy.abs() > dx.abs()) {
-          direction = dy < 0 ? _Direction.up : _Direction.down;
-        } else {
-          direction = dx > 0 ? _Direction.right : _Direction.left;
+        // if one axis delta is sufficiently large, determine direction and set new start reference point
+        if (dx.abs() > tol || dy.abs() > tol) {
+          _Direction direction;
+          if (dy.abs() > dx.abs()) {
+            direction = dy < 0 ? _Direction.up : _Direction.down;
+          } else {
+            direction = dx > 0 ? _Direction.right : _Direction.left;
+          }
+          directions.add(direction);
+          start = details.globalPosition;
         }
-        directions.add(direction);
-        start = details.globalPosition;
       }
-    }
 
-    /// determine if directions match pattern
-    final filteredDirections = Set.from(directions);
-    if (setEquals(filteredDirections, _patternDirection)) {
-      _openLogConsole();
-    }
+      if (directions.length > 0) {
+        /// determine if directions match pattern
+        final filteredDirections = Set.from(directions);
+        if (setEquals(filteredDirections, _patternDirection)) {
+          _openLogConsole();
+        }
+      }
 
-    // reset for next test
-    _dragUpdateDetails.clear();
+      // reset for next test
+      _dragUpdateDetails.clear();
+    }
   }
 
   void _init() {
