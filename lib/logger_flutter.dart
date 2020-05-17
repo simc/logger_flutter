@@ -15,5 +15,4 @@ import 'src/ansi_parser.dart';
 import 'src/shake_detector.dart';
 
 part 'src/log_console.dart';
-part 'src/log_console_on_box_gesture.dart';
-part 'src/log_console_on_shake.dart';
+part 'src/log_console_on_gesture.dart';
