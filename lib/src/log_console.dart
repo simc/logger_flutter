@@ -1,27 +1,33 @@
 part of logger_flutter;
 
 ListQueue<OutputEvent> _outputEventBuffer = ListQueue();
-int _bufferSize = 20;
-bool _initialized = false;
 
 class LogConsole extends StatefulWidget {
   final bool dark;
   final bool showCloseButton;
 
-  LogConsole({this.dark = false, this.showCloseButton = false})
-      : assert(_initialized, "Please call LogConsole.init() first.");
+  LogConsole({this.dark = false, this.showCloseButton = false});
 
-  static void init({int bufferSize = 20}) {
-    if (_initialized) return;
+  static Future<void> open(BuildContext context, {bool dark}) async {
+    var logConsole = LogConsole(
+      showCloseButton: true,
+      dark: dark ?? Theme.of(context).brightness == Brightness.dark,
+    );
+    PageRoute route;
+    if (Platform.isIOS) {
+      route = CupertinoPageRoute(builder: (_) => logConsole);
+    } else {
+      route = MaterialPageRoute(builder: (_) => logConsole);
+    }
 
-    _bufferSize = bufferSize;
-    _initialized = true;
-    Logger.addOutputListener((e) {
-      if (_outputEventBuffer.length == bufferSize) {
-        _outputEventBuffer.removeFirst();
-      }
-      _outputEventBuffer.add(e);
-    });
+    await Navigator.push(context, route);
+  }
+
+  static void add(OutputEvent outputEvent, {int bufferSize = 20}) {
+    while (_outputEventBuffer.length >= (bufferSize ?? 1)) {
+      _outputEventBuffer.removeFirst();
+    }
+    _outputEventBuffer.add(outputEvent);
   }
 
   @override
@@ -38,8 +44,6 @@ class RenderedEvent {
 }
 
 class _LogConsoleState extends State<LogConsole> {
-  OutputCallback _callback;
-
   ListQueue<RenderedEvent> _renderedBuffer = ListQueue();
   List<RenderedEvent> _filteredBuffer = [];
 
@@ -57,21 +61,9 @@ class _LogConsoleState extends State<LogConsole> {
   void initState() {
     super.initState();
 
-    _callback = (e) {
-      if (_renderedBuffer.length == _bufferSize) {
-        _renderedBuffer.removeFirst();
-      }
-
-      _renderedBuffer.add(_renderEvent(e));
-      _refreshFilter();
-    };
-
-    Logger.addOutputListener(_callback);
-
     _scrollController.addListener(() {
       if (!_scrollListenerEnabled) return;
-      var scrolledToBottom = _scrollController.offset >=
-          _scrollController.position.maxScrollExtent;
+      var scrolledToBottom = _scrollController.offset >= _scrollController.position.maxScrollExtent;
       setState(() {
         _followBottom = scrolledToBottom;
       });
@@ -306,12 +298,6 @@ class _LogConsoleState extends State<LogConsole> {
       TextSpan(children: parser.spans),
       text.toLowerCase(),
     );
-  }
-
-  @override
-  void dispose() {
-    Logger.removeOutputListener(_callback);
-    super.dispose();
   }
 }
 
