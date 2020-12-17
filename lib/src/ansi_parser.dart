@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AnsiParser {
   static const TEXT = 0, BRACKET = 1, CODE = 2;
@@ -116,11 +118,15 @@ class AnsiParser {
 
   TextSpan createSpan(String text) {
     return TextSpan(
-      text: text,
-      style: TextStyle(
-        color: foreground,
-        backgroundColor: background,
-      ),
-    );
+        text: text,
+        style: TextStyle(
+          color: foreground,
+          backgroundColor: background,
+        ),
+        recognizer: LongPressGestureRecognizer()
+          ..onLongPress = () {
+            Clipboard.setData(ClipboardData(text: text));
+            // Toast.toast("Copy to paste board");
+          });
   }
 }
