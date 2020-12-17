@@ -196,6 +196,16 @@ class _LogConsoleState extends State<LogConsole> {
           ),
           Spacer(),
           IconButton(
+            icon: Icon(Icons.cancel),
+            onPressed: () {
+              setState(() {
+                //Clear historical data in order to find the target data
+                _outputEventBuffer.clear();
+                _filteredBuffer.clear();
+              });
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
               setState(() {
