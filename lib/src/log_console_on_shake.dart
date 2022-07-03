@@ -6,8 +6,8 @@ class LogConsoleOnShake extends StatefulWidget {
   final bool debugOnly;
 
   LogConsoleOnShake({
-    required this.child,
-    this.dark = false,
+    @required this.child,
+    this.dark,
     this.debugOnly = true,
   });
 
@@ -16,7 +16,7 @@ class LogConsoleOnShake extends StatefulWidget {
 }
 
 class _LogConsoleOnShakeState extends State<LogConsoleOnShake> {
-  late ShakeDetector _detector;
+  ShakeDetector _detector;
   bool _open = false;
 
   @override
@@ -44,14 +44,14 @@ class _LogConsoleOnShakeState extends State<LogConsoleOnShake> {
     _detector.startListening();
   }
 
-  void _openLogConsole() async {
+  _openLogConsole() async {
     if (_open) return;
 
     _open = true;
 
     var logConsole = LogConsole(
       showCloseButton: true,
-      dark: widget.dark,
+      dark: widget.dark ?? Theme.of(context).brightness == Brightness.dark,
     );
     PageRoute route;
     if (Platform.isIOS) {
