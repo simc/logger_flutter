@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:sensors/sensors.dart';
+import 'package:sensors_plus/sensors_plus.dart' as sensors;
 
 class ShakeDetector {
-  final VoidCallback onPhoneShake;
+  final VoidCallback? onPhoneShake;
 
   final double shakeThresholdGravity;
 
@@ -19,7 +19,7 @@ class ShakeDetector {
 
   int lastShakeTimestamp = DateTime.now().millisecondsSinceEpoch;
 
-  StreamSubscription streamSubscription;
+  StreamSubscription? streamSubscription;
 
   ShakeDetector({
     this.onPhoneShake,
@@ -29,9 +29,9 @@ class ShakeDetector {
     this.minShakeCount = 2,
   });
 
-  /// Starts listening to accerelometer events
+  /// Starts listening to accelerometer events
   void startListening() {
-    streamSubscription = accelerometerEvents.listen((event) {
+    streamSubscription = sensors.accelerometerEvents.listen((event) {
       var gX = event.x / 9.81;
       var gY = event.y / 9.81;
       var gZ = event.z / 9.81;
@@ -53,7 +53,7 @@ class ShakeDetector {
         lastShakeTimestamp = now;
         if (++shakeCount >= minShakeCount) {
           shakeCount = 0;
-          onPhoneShake();
+          (onPhoneShake ?? () {})();
         }
       }
     });
@@ -62,7 +62,7 @@ class ShakeDetector {
   /// Stops listening to accelerometer events
   void stopListening() {
     if (streamSubscription != null) {
-      streamSubscription.cancel();
+      streamSubscription?.cancel();
     }
   }
 }
