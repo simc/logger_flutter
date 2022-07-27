@@ -11,5 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  logger: ">=1.1.1"
+  logger:
+    git: https://github.com/FMotalleb/logger.git
   sensors_plus: ">=1.3.2"
