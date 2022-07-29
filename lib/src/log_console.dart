@@ -206,6 +206,23 @@ class _LogConsoleState extends State<LogConsole> {
           ),
           Spacer(),
           IconButton(
+            icon: Icon(Icons.delete, color: Color.fromARGB(255, 254, 20, 3),),
+            onPressed: () {
+              _renderedBuffer.clear();
+              _refreshFilter();
+              setState(() {
+                
+              });
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.import_export),
+            onPressed: () {
+              var content = _renderedBuffer.map((e) => e.lowerCaseText).join();
+             Share.share(content);
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
               setState(() {
