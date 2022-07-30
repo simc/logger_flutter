@@ -209,6 +209,7 @@ class _LogConsoleState extends State<LogConsole> {
             icon: Icon(Icons.delete, color: Color.fromARGB(255, 254, 20, 3),),
             onPressed: () {
               _renderedBuffer.clear();
+              _outputEventBuffer.clear();
               _refreshFilter();
               setState(() {
                 
