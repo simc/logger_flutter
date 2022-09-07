@@ -7,8 +7,14 @@ bool _initialized = false;
 class LogConsole extends StatefulWidget {
   final bool dark;
   final bool showCloseButton;
+  final bool showClearButton;
+  final void Function(String content)? onExport;
 
-  LogConsole({this.dark = false, this.showCloseButton = false})
+  LogConsole(
+      {this.dark = false,
+      this.showCloseButton = false,
+      this.showClearButton = true,
+      this.onExport})
       : assert(_initialized, "Please call LogConsole.init() first.");
 
   static void init({int bufferSize = 20}) {
@@ -27,12 +33,20 @@ class LogConsole extends StatefulWidget {
     ));
   }
 
-  static void open(BuildContext context) {
+  static void open(BuildContext context,
+      {bool dark = false,
+      bool showCloseButton = false,
+      bool showClearButton = true,
+      void Function(String)? onExport}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LogConsole(),
-      ),
+          builder: (context) => LogConsole(
+                dark: dark,
+                showClearButton: showClearButton,
+                showCloseButton: showCloseButton,
+                onExport: onExport,
+              )),
     );
   }
 
@@ -81,7 +95,8 @@ class _LogConsoleState extends State<LogConsole> {
 
     _scrollController.addListener(() {
       if (!_scrollListenerEnabled) return;
-      var scrolledToBottom = _scrollController.offset >= _scrollController.position.maxScrollExtent;
+      var scrolledToBottom = _scrollController.offset >=
+          _scrollController.position.maxScrollExtent;
       setState(() {
         _followBottom = scrolledToBottom;
       });
@@ -127,11 +142,13 @@ class _LogConsoleState extends State<LogConsole> {
       theme: widget.dark
           ? ThemeData(
               brightness: Brightness.dark,
-              colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey),
+              colorScheme:
+                  ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey),
             )
           : ThemeData(
               brightness: Brightness.light,
-              colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.lightBlueAccent),
+              colorScheme: ColorScheme.fromSwatch()
+                  .copyWith(secondary: Colors.lightBlueAccent),
             ),
       home: Scaffold(
         body: SafeArea(
@@ -205,6 +222,30 @@ class _LogConsoleState extends State<LogConsole> {
             ),
           ),
           Spacer(),
+          if (widget.showClearButton)
+            IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Color.fromARGB(255, 254, 20, 3),
+              ),
+              onPressed: () {
+                _renderedBuffer.clear();
+                _outputEventBuffer.clear();
+                _refreshFilter();
+                setState(() {});
+              },
+            ),
+          IconButton(
+            icon: Icon(Icons.import_export),
+            onPressed: () {
+              var content = _renderedBuffer.map((e) => e.lowerCaseText).join();
+              if(widget.onExport != null) {
+                widget.onExport?.call(content);
+              } else {
+                Share.share(content);
+              }
+            },
+          ),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
