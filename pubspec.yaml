@@ -10,5 +10,5 @@ dependencies:
   flutter:
     sdk: flutter
   logger_fork: ^1.2.0
-  sensors_plus: ">=1.3.2"
+  sensors_plus: ^1.3.4+1
   share_plus: ^4.0.10
