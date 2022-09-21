@@ -1,4 +1,4 @@
-part of logger_flutter;
+part of logger_flutter_fork;
 
 ListQueue<OutputEvent> _outputEventBuffer = ListQueue();
 int _bufferSize = 20;
@@ -10,11 +10,7 @@ class LogConsole extends StatefulWidget {
   final bool showClearButton;
   final void Function(String content)? onExport;
 
-  LogConsole(
-      {this.dark = false,
-      this.showCloseButton = false,
-      this.showClearButton = true,
-      this.onExport})
+  LogConsole({this.dark = false, this.showCloseButton = false, this.showClearButton = true, this.onExport})
       : assert(_initialized, "Please call LogConsole.init() first.");
 
   static void init({int bufferSize = 20}) {
@@ -34,10 +30,7 @@ class LogConsole extends StatefulWidget {
   }
 
   static void open(BuildContext context,
-      {bool dark = false,
-      bool showCloseButton = false,
-      bool showClearButton = true,
-      void Function(String)? onExport}) {
+      {bool dark = false, bool showCloseButton = false, bool showClearButton = true, void Function(String)? onExport}) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -95,8 +88,7 @@ class _LogConsoleState extends State<LogConsole> {
 
     _scrollController.addListener(() {
       if (!_scrollListenerEnabled) return;
-      var scrolledToBottom = _scrollController.offset >=
-          _scrollController.position.maxScrollExtent;
+      var scrolledToBottom = _scrollController.offset >= _scrollController.position.maxScrollExtent;
       setState(() {
         _followBottom = scrolledToBottom;
       });
@@ -142,13 +134,11 @@ class _LogConsoleState extends State<LogConsole> {
       theme: widget.dark
           ? ThemeData(
               brightness: Brightness.dark,
-              colorScheme:
-                  ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey),
+              colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey),
             )
           : ThemeData(
               brightness: Brightness.light,
-              colorScheme: ColorScheme.fromSwatch()
-                  .copyWith(secondary: Colors.lightBlueAccent),
+              colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.lightBlueAccent),
             ),
       home: Scaffold(
         body: SafeArea(
@@ -239,7 +229,7 @@ class _LogConsoleState extends State<LogConsole> {
             icon: Icon(Icons.import_export),
             onPressed: () {
               var content = _renderedBuffer.map((e) => e.lowerCaseText).join();
-              if(widget.onExport != null) {
+              if (widget.onExport != null) {
                 widget.onExport?.call(content);
               } else {
                 Share.share(content);

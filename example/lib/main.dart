@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:logger_flutter/logger_flutter.dart';
+import 'package:logger_fork/logger_fork.dart';
+import 'package:logger_flutter_fork/logger_flutter_fork.dart';
 
 void main() {
   LogConsole.init();
