@@ -229,11 +229,11 @@ class _LogConsoleState extends State<LogConsole> {
             icon: Icon(Icons.import_export),
             onPressed: () {
               var content = _renderedBuffer.map((e) => e.lowerCaseText).join();
-              if (widget.onExport != null) {
-                widget.onExport?.call(content);
-              } else {
-                Share.share(content);
-              }
+              // if (widget.onExport != null) {
+              widget.onExport?.call(content);
+              // } else {
+              // Share.share(content);
+              // }
             },
           ),
           IconButton(
