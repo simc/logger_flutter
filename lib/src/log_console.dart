@@ -229,11 +229,18 @@ class _LogConsoleState extends State<LogConsole> {
             icon: Icon(Icons.import_export),
             onPressed: () {
               var content = _renderedBuffer.map((e) => e.lowerCaseText).join();
-              // if (widget.onExport != null) {
-              widget.onExport?.call(content);
-              // } else {
-              // Share.share(content);
-              // }
+              if (widget.onExport != null) {
+                widget.onExport?.call(content);
+              } else {
+                if (kDebugMode) {
+                  log(
+                    'removed share functionality from logger package you need to add this manually',
+                    level: 24,
+                    error: UnimplementedError(),
+                  );
+                }
+                // Share.share(content);
+              }
             },
           ),
           IconButton(
