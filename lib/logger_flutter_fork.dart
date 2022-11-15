@@ -1,14 +1,15 @@
 /// Flutter extension for logger
-library logger_flutter;
+library logger_flutter_fork;
 
 import 'dart:collection';
+import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
+import 'package:logger_fork/logger_fork.dart';
+// import 'package:share_plus/share_plus.dart';
 
 import 'src/ansi_parser.dart';
 import 'src/shake_detector.dart';
