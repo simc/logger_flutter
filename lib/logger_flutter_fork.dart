@@ -2,9 +2,11 @@
 library logger_flutter_fork;
 
 import 'dart:collection';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger_fork/logger_fork.dart';
 // import 'package:share_plus/share_plus.dart';
