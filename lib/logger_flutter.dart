@@ -6,7 +6,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
-import 'src/ansi_parser.dart';
+import 'src/utils/ansi_parser.dart';
 
 export 'src/shake/default_shake_detector.dart';
 export 'src/shake/shake_detector.dart';

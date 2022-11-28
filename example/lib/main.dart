@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:logger_flutter/logger_flutter.dart';
 
@@ -37,8 +37,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: LogConsoleOnShake(
-          dark: true,
+        body: ShakeDetectorWidget(
+          shakeDetector: DefaultShakeDetector(
+            onPhoneShake: () {},
+          ),
           child: Center(
             child: Text("Shake Phone to open Console."),
           ),
