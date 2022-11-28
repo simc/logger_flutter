@@ -6,8 +6,8 @@ class LogConsoleOnShake extends StatefulWidget {
   final bool debugOnly;
 
   LogConsoleOnShake({
-    @required this.child,
-    this.dark,
+    required this.child,
+    required this.dark,
     this.debugOnly = true,
   });
 
@@ -16,7 +16,7 @@ class LogConsoleOnShake extends StatefulWidget {
 }
 
 class _LogConsoleOnShakeState extends State<LogConsoleOnShake> {
-  ShakeDetector _detector;
+  late ShakeDetector _detector;
   bool _open = false;
 
   @override
