@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:logger_flutter_plus/src/shake/shake_detector.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-class ShakeDetector {
-  ShakeDetector({
+class DefaultShakeDetector implements ShakeDetector {
+  DefaultShakeDetector({
     required this.onPhoneShake,
     this.shakeThresholdGravity = 1.25,
     this.minTimeBetweenShakes = 160,
@@ -13,11 +14,15 @@ class ShakeDetector {
     this.minShakeCount = 2,
   });
 
+  @override
   final VoidCallback onPhoneShake;
-
+  @override
   final double shakeThresholdGravity;
+  @override
   final int minTimeBetweenShakes;
+  @override
   final int shakeCountResetTime;
+  @override
   final int minShakeCount;
 
   int _shakeCount = 0;
@@ -25,6 +30,7 @@ class ShakeDetector {
   StreamSubscription? _streamSubscription;
 
   /// Starts listening to accerelometer events
+  @override
   void startListening() {
     _streamSubscription = accelerometerEvents
         .map((event) {
@@ -57,6 +63,7 @@ class ShakeDetector {
   }
 
   /// Stops listening to accelerometer events
+  @override
   void stopListening() {
     _streamSubscription?.cancel();
     _streamSubscription = null;
