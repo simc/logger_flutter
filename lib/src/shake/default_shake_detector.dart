@@ -32,6 +32,7 @@ class DefaultShakeDetector implements ShakeDetector {
   /// Starts listening to accerelometer events
   @override
   void startListening() {
+    startListening();
     _streamSubscription = accelerometerEvents
         .map((event) {
           final gX = event.x / 9.81;
