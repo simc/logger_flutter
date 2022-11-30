@@ -12,4 +12,5 @@ dependencies:
     sdk: flutter
 
   logger: ^1.1.0
+  collection: ^1.16.0
   sensors_plus: ^2.0.1
