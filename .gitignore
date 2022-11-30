@@ -4,6 +4,8 @@
 .idea/
 .iml
 
+.fvm/flutter_sdk
+
 .packages
 .pub/
 
