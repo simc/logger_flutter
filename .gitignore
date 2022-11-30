@@ -16,3 +16,5 @@ demo/
 
 pubspec.lock
 doc/
+.flutter-plugins-dependencies
+example/.flutter-plugins-dependencies
