@@ -7,17 +7,17 @@ class AnsiParser {
 
   AnsiParser(this.dark);
 
-  Color foreground;
-  Color background;
-  List<TextSpan> spans;
+  Color? foreground;
+  Color? background;
+  List<TextSpan> spans = [];
 
   void parse(String s) {
     spans = [];
     var state = TEXT;
-    StringBuffer buffer;
+    StringBuffer buffer = StringBuffer();
     var text = StringBuffer();
     var code = 0;
-    List<int> codes;
+    List<int> codes = [];
 
     for (var i = 0, n = s.length; i < n; i++) {
       var c = s[i];
@@ -99,7 +99,7 @@ class AnsiParser {
     }
   }
 
-  Color getColor(int colorCode, bool foreground) {
+  Color? getColor(int colorCode, bool foreground) {
     switch (colorCode) {
       case 0:
         return foreground ? Colors.black : Colors.transparent;
@@ -112,6 +112,7 @@ class AnsiParser {
       case 199:
         return dark ? Colors.pink[300] : Colors.pink[700];
     }
+    return null;
   }
 
   TextSpan createSpan(String text) {
