@@ -3,10 +3,10 @@ import 'package:logger_flutter_plus/src/shake/shake_detector.dart';
 
 class ShakeDetectorWidget extends StatefulWidget {
   const ShakeDetectorWidget({
-    Key? key,
+    super.key,
     required this.child,
     required this.shakeDetector,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final ShakeDetector shakeDetector;
