@@ -42,6 +42,8 @@ class _LogConsoleContentState extends State<LogConsoleContent> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
@@ -52,7 +54,7 @@ class _LogConsoleContentState extends State<LogConsoleContent> {
           itemBuilder: (context, index) => Text.rich(
             widget.logConsoleManager.logs[index].span,
             key: ValueKey(widget.logConsoleManager.logs[index].id),
-            style: TextStyle(fontSize: widget.logFontSize),
+            style: theme.textTheme.bodyText1?.copyWith(fontSize: widget.logFontSize),
           ),
           itemCount: widget.logConsoleManager.logs.length,
         ),

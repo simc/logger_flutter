@@ -90,11 +90,13 @@ class _LogConsoleWidgetState extends State<LogConsoleWidget> {
             LogConsoleBottomBar(
               filterLevel: _filterLevel,
               onChangedFilterLevel: (filterLevel) {
+                widget.logConsoleManager.setFilterLevel(filterLevel);
                 setState(() {
                   _filterLevel = filterLevel;
                 });
               },
               onChangedFilterText: (filterText) {
+                widget.logConsoleManager.setFilterText(filterText);
                 setState(() {
                   _filterText = filterText;
                 });

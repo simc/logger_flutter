@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:logger_flutter_plus/logger_flutter_plus.dart';
 
 void main() {
-  var logConsoleManager = LogConsoleManager();
+  var logConsoleManager = LogConsoleManager(
+    isDark: true,
+  );
 
   final appOutput = AppLogOutput(logConsoleManager: logConsoleManager);
 

@@ -4,6 +4,9 @@
 .idea/
 .iml
 
+.flutter-plugins-dependencies
+example/.flutter-plugins-dependencies
+
 .fvm/flutter_sdk
 
 .packages

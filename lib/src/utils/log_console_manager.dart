@@ -7,10 +7,30 @@ import 'package:logger_flutter_plus/src/models/log_rendered_event.dart';
 import 'package:logger_flutter_plus/src/utils/ansi_parser.dart';
 
 class LogConsoleManager extends ChangeNotifier {
-  final ListQueue<LogRenderedEvent> _buffer = ListQueue();
-  final AnsiParser _ansiParser = AnsiParser(false);
+  LogConsoleManager({
+    required bool isDark,
+  }) : _ansiParser = AnsiParser(isDark);
 
-  List<LogRenderedEvent> get logs => _buffer.toList();
+  final ListQueue<LogRenderedEvent> _buffer = ListQueue();
+  final AnsiParser _ansiParser;
+
+  Level? _filterLevel;
+  String _filterText = '';
+
+  List<LogRenderedEvent> get logs => _buffer
+      .where((element) => _filterLevel == null ? true : element.level == _filterLevel)
+      .where((element) => _filterText.isEmpty ? true : element.lowerCaseText.contains(_filterText))
+      .toList();
+
+  void setFilterLevel(Level? level) {
+    _filterLevel = level;
+    notifyListeners();
+  }
+
+  void setFilterText(String filterText) {
+    _filterText = filterText;
+    notifyListeners();
+  }
 
   void addLog(OutputEvent event) {
     final text = event.lines.join('\n');
