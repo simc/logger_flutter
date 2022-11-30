@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:logger_flutter_plus/src/theme/log_console_theme.dart';
 import 'package:logger_flutter_plus/src/utils/log_console_manager.dart';
 import 'package:logger_flutter_plus/src/widgets/log_console_app_bar.dart';
 import 'package:logger_flutter_plus/src/widgets/log_console_bottom_bar.dart';
 import 'package:logger_flutter_plus/src/widgets/log_console_content.dart';
 
 class LogConsoleWidget extends StatefulWidget {
-  const LogConsoleWidget({
+  LogConsoleWidget({
     super.key,
     required this.logConsoleManager,
     this.showCloseButton = false,
-  });
+    LogConsoleTheme? theme,
+  }) : theme = theme ?? LogConsoleTheme.dark();
 
   final bool showCloseButton;
   final LogConsoleManager logConsoleManager;
+  late final LogConsoleTheme theme;
 
   @override
   State<LogConsoleWidget> createState() => _LogConsoleWidgetState();
@@ -61,11 +64,13 @@ class _LogConsoleWidgetState extends State<LogConsoleWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             LogConsoleAppBar(
+              theme: widget.theme,
               showCloseButton: widget.showCloseButton,
               onDecreaseFontSize: () {
                 setState(() {
@@ -80,6 +85,7 @@ class _LogConsoleWidgetState extends State<LogConsoleWidget> {
             ),
             Expanded(
               child: LogConsoleContent(
+                theme: widget.theme,
                 logFontSize: _logFontSize,
                 filterLevel: _filterLevel,
                 filterText: _filterText,
@@ -88,6 +94,7 @@ class _LogConsoleWidgetState extends State<LogConsoleWidget> {
               ),
             ),
             LogConsoleBottomBar(
+              theme: widget.theme,
               filterLevel: _filterLevel,
               onChangedFilterLevel: (filterLevel) {
                 widget.logConsoleManager.setFilterLevel(filterLevel);

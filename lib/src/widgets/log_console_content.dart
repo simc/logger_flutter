@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:logger_flutter_plus/src/theme/log_console_theme.dart';
 import 'package:logger_flutter_plus/src/utils/log_console_manager.dart';
 
 class LogConsoleContent extends StatefulWidget {
@@ -10,6 +11,7 @@ class LogConsoleContent extends StatefulWidget {
     required this.filterText,
     required this.scrollController,
     required this.logConsoleManager,
+    required this.theme,
   });
 
   final double logFontSize;
@@ -18,6 +20,7 @@ class LogConsoleContent extends StatefulWidget {
 
   final ScrollController scrollController;
   final LogConsoleManager logConsoleManager;
+  final LogConsoleTheme theme;
 
   @override
   State<LogConsoleContent> createState() => _LogConsoleContentState();
@@ -42,8 +45,6 @@ class _LogConsoleContentState extends State<LogConsoleContent> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
@@ -54,7 +55,7 @@ class _LogConsoleContentState extends State<LogConsoleContent> {
           itemBuilder: (context, index) => Text.rich(
             widget.logConsoleManager.logs[index].span,
             key: ValueKey(widget.logConsoleManager.logs[index].id),
-            style: theme.textTheme.bodyText1?.copyWith(fontSize: widget.logFontSize),
+            style: widget.theme.bodyLarge?.copyWith(fontSize: widget.logFontSize),
           ),
           itemCount: widget.logConsoleManager.logs.length,
         ),

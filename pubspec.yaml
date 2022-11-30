@@ -1,8 +1,8 @@
 name: logger_flutter_plus
 description: Flutter extension for logger. Please go there for documentation.
-version: 1.0.2
+version: 1.0.3
 
-homepage: https://github.com/Oliinyk-Volodymyr/logger_flutter
+homepage: https://github.com/Oliinyk-Volodymyr/logger_flutter_plus
 
 environment:
   sdk: ">=2.17.0 <3.0.0"

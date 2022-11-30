@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger_flutter_plus/src/theme/log_console_theme.dart';
 
 class LogConsoleAppBar extends StatelessWidget {
   const LogConsoleAppBar({
@@ -6,21 +7,21 @@ class LogConsoleAppBar extends StatelessWidget {
     this.showCloseButton = true,
     required this.onIncreaseFontSize,
     required this.onDecreaseFontSize,
+    required this.theme,
   });
 
   final bool showCloseButton;
 
   final VoidCallback onDecreaseFontSize;
   final VoidCallback onIncreaseFontSize;
+  final LogConsoleTheme theme;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       height: 60,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: theme.bottomAppBarTheme.color ?? theme.bottomAppBarColor,
+      color: theme.bottomAppBarColor,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[

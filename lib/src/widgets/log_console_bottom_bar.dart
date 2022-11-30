@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:logger_flutter_plus/src/theme/log_console_theme.dart';
 
 class LogConsoleBottomBar extends StatelessWidget {
   const LogConsoleBottomBar({
@@ -7,20 +8,20 @@ class LogConsoleBottomBar extends StatelessWidget {
     this.filterLevel,
     this.onChangedFilterLevel,
     this.onChangedFilterText,
+    required this.theme,
   });
 
   final ValueChanged<Level?>? onChangedFilterLevel;
   final ValueChanged<String>? onChangedFilterText;
   final Level? filterLevel;
+  final LogConsoleTheme theme;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       height: 60,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: theme.bottomAppBarTheme.color ?? theme.bottomAppBarColor,
+      color: theme.bottomAppBarColor,
       child: Row(
         children: [
           Expanded(
