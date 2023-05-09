@@ -32,7 +32,9 @@ dependencies:
   logger_flutter:
     path: ../
   logger:
-    git: https://github.com/FMotalleb/logger.git
+    git:
+      url: https://github.com/FMotalleb/logger.git
+      ref: a3545e37f1a37414fbd425f0aa3bd603d94cec31
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -8,12 +8,14 @@ class LogConsole extends StatefulWidget {
   final bool dark;
   final bool showCloseButton;
   final bool showClearButton;
+  final bool scrollEnabled;
   final void Function(String content)? onExport;
 
   LogConsole(
       {this.dark = false,
       this.showCloseButton = false,
       this.showClearButton = true,
+      this.scrollEnabled = true,
       this.onExport})
       : assert(_initialized, "Please call LogConsole.init() first.");
 
@@ -37,6 +39,7 @@ class LogConsole extends StatefulWidget {
       {bool dark = false,
       bool showCloseButton = false,
       bool showClearButton = true,
+      bool scrollEnabled = true,
       void Function(String)? onExport}) {
     Navigator.push(
       context,
@@ -45,6 +48,7 @@ class LogConsole extends StatefulWidget {
                 dark: dark,
                 showClearButton: showClearButton,
                 showCloseButton: showCloseButton,
+                scrollEnabled: scrollEnabled,
                 onExport: onExport,
               )),
     );
@@ -77,6 +81,7 @@ class _LogConsoleState extends State<LogConsole> {
 
   var _currentId = 0;
   bool _scrollListenerEnabled = true;
+  bool get _scrollEnabled => widget.scrollEnabled;
   bool _followBottom = true;
 
   @override
@@ -239,7 +244,7 @@ class _LogConsoleState extends State<LogConsole> {
             icon: Icon(Icons.import_export),
             onPressed: () {
               var content = _renderedBuffer.map((e) => e.lowerCaseText).join();
-              if(widget.onExport != null) {
+              if (widget.onExport != null) {
                 widget.onExport?.call(content);
               } else {
                 Share.share(content);
@@ -331,6 +336,9 @@ class _LogConsoleState extends State<LogConsole> {
   }
 
   void _scrollToBottom() async {
+    if (!_scrollEnabled) {
+      return;
+    }
     _scrollListenerEnabled = false;
 
     setState(() {
