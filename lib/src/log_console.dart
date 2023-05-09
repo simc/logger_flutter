@@ -7,8 +7,16 @@ bool _initialized = false;
 class LogConsole extends StatefulWidget {
   final bool dark;
   final bool showCloseButton;
+  final bool showClearButton;
+  final bool scrollEnabled;
+  final void Function(String content)? onExport;
 
-  LogConsole({this.dark = false, this.showCloseButton = false})
+  LogConsole(
+      {this.dark = false,
+      this.showCloseButton = false,
+      this.showClearButton = true,
+      this.scrollEnabled = true,
+      this.onExport})
       : assert(_initialized, "Please call LogConsole.init() first.");
 
   static void init({int bufferSize = 20}) {
@@ -16,12 +24,34 @@ class LogConsole extends StatefulWidget {
 
     _bufferSize = bufferSize;
     _initialized = true;
-    Logger.addOutputListener((e) {
-      if (_outputEventBuffer.length == bufferSize) {
-        _outputEventBuffer.removeFirst();
-      }
-      _outputEventBuffer.add(e);
-    });
+
+    Logger.addOutputListener(LogOutputListener(
+      (e) {
+        if (_outputEventBuffer.length == bufferSize) {
+          _outputEventBuffer.removeFirst();
+        }
+        _outputEventBuffer.add(e);
+      },
+    ));
+  }
+
+  static void open(BuildContext context,
+      {bool dark = false,
+      bool showCloseButton = false,
+      bool showClearButton = true,
+      bool scrollEnabled = true,
+      void Function(String)? onExport}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => LogConsole(
+                dark: dark,
+                showClearButton: showClearButton,
+                showCloseButton: showCloseButton,
+                scrollEnabled: scrollEnabled,
+                onExport: onExport,
+              )),
+    );
   }
 
   @override
@@ -38,7 +68,7 @@ class RenderedEvent {
 }
 
 class _LogConsoleState extends State<LogConsole> {
-  OutputCallback _callback;
+  late LogOutputListener _callback;
 
   ListQueue<RenderedEvent> _renderedBuffer = ListQueue();
   List<RenderedEvent> _filteredBuffer = [];
@@ -51,20 +81,20 @@ class _LogConsoleState extends State<LogConsole> {
 
   var _currentId = 0;
   bool _scrollListenerEnabled = true;
+  bool get _scrollEnabled => widget.scrollEnabled;
   bool _followBottom = true;
 
   @override
   void initState() {
     super.initState();
 
-    _callback = (e) {
+    _callback = LogOutputListener((e) {
       if (_renderedBuffer.length == _bufferSize) {
         _renderedBuffer.removeFirst();
       }
-
       _renderedBuffer.add(_renderEvent(e));
       _refreshFilter();
-    };
+    });
 
     Logger.addOutputListener(_callback);
 
@@ -117,11 +147,13 @@ class _LogConsoleState extends State<LogConsole> {
       theme: widget.dark
           ? ThemeData(
               brightness: Brightness.dark,
-              accentColor: Colors.blueGrey,
+              colorScheme:
+                  ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey),
             )
           : ThemeData(
               brightness: Brightness.light,
-              accentColor: Colors.lightBlueAccent,
+              colorScheme: ColorScheme.fromSwatch()
+                  .copyWith(secondary: Colors.lightBlueAccent),
             ),
       home: Scaffold(
         body: SafeArea(
@@ -195,6 +227,30 @@ class _LogConsoleState extends State<LogConsole> {
             ),
           ),
           Spacer(),
+          if (widget.showClearButton)
+            IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Color.fromARGB(255, 254, 20, 3),
+              ),
+              onPressed: () {
+                _renderedBuffer.clear();
+                _outputEventBuffer.clear();
+                _refreshFilter();
+                setState(() {});
+              },
+            ),
+          IconButton(
+            icon: Icon(Icons.import_export),
+            onPressed: () {
+              var content = _renderedBuffer.map((e) => e.lowerCaseText).join();
+              if (widget.onExport != null) {
+                widget.onExport?.call(content);
+              } else {
+                Share.share(content);
+              }
+            },
+          ),
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
@@ -241,7 +297,7 @@ class _LogConsoleState extends State<LogConsole> {
             ),
           ),
           SizedBox(width: 20),
-          DropdownButton(
+          DropdownButton<Level>(
             value: _filterLevel,
             items: [
               DropdownMenuItem(
@@ -270,7 +326,7 @@ class _LogConsoleState extends State<LogConsole> {
               )
             ],
             onChanged: (value) {
-              _filterLevel = value;
+              _filterLevel = value ?? Level.info;
               _refreshFilter();
             },
           )
@@ -280,6 +336,9 @@ class _LogConsoleState extends State<LogConsole> {
   }
 
   void _scrollToBottom() async {
+    if (!_scrollEnabled) {
+      return;
+    }
     _scrollListenerEnabled = false;
 
     setState(() {
@@ -319,7 +378,7 @@ class LogBar extends StatelessWidget {
   final bool dark;
   final Widget child;
 
-  LogBar({this.dark, this.child});
+  LogBar({required this.dark, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +389,7 @@ class LogBar extends StatelessWidget {
           boxShadow: [
             if (!dark)
               BoxShadow(
-                color: Colors.grey[400],
+                color: Colors.grey[400] ?? Colors.grey,
                 blurRadius: 3,
               ),
           ],
@@ -344,5 +403,16 @@ class LogBar extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class LogOutputListener extends LogOutput {
+  final void Function(OutputEvent) _listener;
+
+  LogOutputListener(this._listener);
+
+  @override
+  void output(OutputEvent event) {
+    _listener(event);
   }
 }
