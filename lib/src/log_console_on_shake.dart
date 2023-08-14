@@ -2,11 +2,11 @@ part of logger_flutter;
 
 class LogConsoleOnShake extends StatefulWidget {
   final Widget child;
-  final bool dark;
+  final bool? dark;
   final bool debugOnly;
 
   LogConsoleOnShake({
-    @required this.child,
+    required this.child,
     this.dark,
     this.debugOnly = true,
   });
@@ -16,7 +16,7 @@ class LogConsoleOnShake extends StatefulWidget {
 }
 
 class _LogConsoleOnShakeState extends State<LogConsoleOnShake> {
-  ShakeDetector _detector;
+  late ShakeDetector _detector;
   bool _open = false;
 
   @override

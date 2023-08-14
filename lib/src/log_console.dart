@@ -38,7 +38,7 @@ class RenderedEvent {
 }
 
 class _LogConsoleState extends State<LogConsole> {
-  OutputCallback _callback;
+  late OutputCallback _callback;
 
   ListQueue<RenderedEvent> _renderedBuffer = ListQueue();
   List<RenderedEvent> _filteredBuffer = [];
@@ -46,7 +46,7 @@ class _LogConsoleState extends State<LogConsole> {
   var _scrollController = ScrollController();
   var _filterController = TextEditingController();
 
-  Level _filterLevel = Level.verbose;
+  Level _filterLevel = Level.trace;
   double _logFontSize = 14;
 
   var _currentId = 0;
@@ -70,8 +70,7 @@ class _LogConsoleState extends State<LogConsole> {
 
     _scrollController.addListener(() {
       if (!_scrollListenerEnabled) return;
-      var scrolledToBottom = _scrollController.offset >=
-          _scrollController.position.maxScrollExtent;
+      var scrolledToBottom = _scrollController.offset >= _scrollController.position.maxScrollExtent;
       setState(() {
         _followBottom = scrolledToBottom;
       });
@@ -117,11 +116,11 @@ class _LogConsoleState extends State<LogConsole> {
       theme: widget.dark
           ? ThemeData(
               brightness: Brightness.dark,
-              accentColor: Colors.blueGrey,
+              colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blueGrey),
             )
           : ThemeData(
               brightness: Brightness.light,
-              accentColor: Colors.lightBlueAccent,
+              colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.lightBlueAccent),
             ),
       home: Scaffold(
         body: SafeArea(
@@ -241,12 +240,12 @@ class _LogConsoleState extends State<LogConsole> {
             ),
           ),
           SizedBox(width: 20),
-          DropdownButton(
+          DropdownButton<Level>(
             value: _filterLevel,
             items: [
               DropdownMenuItem(
                 child: Text("VERBOSE"),
-                value: Level.verbose,
+                value: Level.trace,
               ),
               DropdownMenuItem(
                 child: Text("DEBUG"),
@@ -266,12 +265,14 @@ class _LogConsoleState extends State<LogConsole> {
               ),
               DropdownMenuItem(
                 child: Text("WTF"),
-                value: Level.wtf,
+                value: Level.fatal,
               )
             ],
             onChanged: (value) {
-              _filterLevel = value;
-              _refreshFilter();
+              if (value != null) {
+                _filterLevel = value;
+                _refreshFilter();
+              }
             },
           )
         ],
@@ -319,7 +320,7 @@ class LogBar extends StatelessWidget {
   final bool dark;
   final Widget child;
 
-  LogBar({this.dark, this.child});
+  LogBar({required this.dark, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +331,7 @@ class LogBar extends StatelessWidget {
           boxShadow: [
             if (!dark)
               BoxShadow(
-                color: Colors.grey[400],
+                color: Colors.grey.shade400,
                 blurRadius: 3,
               ),
           ],

@@ -19,10 +19,10 @@ class ShakeDetector {
 
   int lastShakeTimestamp = DateTime.now().millisecondsSinceEpoch;
 
-  StreamSubscription streamSubscription;
+  StreamSubscription? streamSubscription;
 
   ShakeDetector({
-    this.onPhoneShake,
+    required this.onPhoneShake,
     this.shakeThresholdGravity = 1.25,
     this.minTimeBetweenShakes = 160,
     this.shakeCountResetTime = 1500,
@@ -62,7 +62,7 @@ class ShakeDetector {
   /// Stops listening to accelerometer events
   void stopListening() {
     if (streamSubscription != null) {
-      streamSubscription.cancel();
+      streamSubscription!.cancel();
     }
   }
 }
